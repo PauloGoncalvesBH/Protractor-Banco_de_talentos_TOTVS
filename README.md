@@ -133,21 +133,23 @@ https://nodejs.org/en/download/
 ### Arquitetura dos arquivos
 ```
 Protractor/
- ├──page_objects                    * Diretório contendo todos os page objects utilizados nos testes
- |   ├──Mensagens.po.js
- |   ├──QueroMeCadastrar.po.js
- |   ├──Login.po.js
- |   └── *.po.js
+ |
+ ├──page_objects/                   * Diretório contendo todos os page objects utilizados nos testes
+ |   ├──Mensagens.po.js		    * Page object que agrupa todas as mensagens de alerta da página
+ |   ├──QueroMeCadastrar.po.js      * Page object do spec 'QueroMeCadastrar.spec.js'
+ |   ├──Login.po.js                 * Page object do spec 'Login.spec.js'
+ |   └── *.po.js                    * Outros page objects
+ |
  ├──specs/                          * Diretório contendo todos os casos de teste
- |   ├──QueroMeCadastrar.spec.js
- |   ├──Login.spec.js
- |   └── *.spec.js
- ├──Readme.md
- ├──TOTVS-Banco_de_Talentos.png     * Imagem utilizada no Readme.md
+ |   ├──QueroMeCadastrar.spec.js    * Teste da página 'Quero Me Cadastrar'
+ |   ├──Login.spec.js               * Teste da página 'Login'
+ |   └── *.spec.js                  * Outros specs
+ |
+ ├──README.md
+ ├──TOTVS-Banco_de_Talentos.png     * Imagem utilizada no README.md
  ├──helper.js                       * Biblioteca de funções utilizadas em todas as páginas
- ├──protractor-pequeno.png          * Imagem utilizada no Readme.md
+ ├──protractor-pequeno.png          * Imagem utilizada no README.md
  └──protractor.conf.js              * Configuração do projeto
- 
   ```
 
 - - - -
