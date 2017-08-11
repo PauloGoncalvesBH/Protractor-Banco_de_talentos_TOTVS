@@ -1,4 +1,4 @@
-﻿
+
 ![picture alt](TOTVS-Banco_de_Talentos.png "TOTVS - Banco de Talentos")
 ![picture alt](protractor-pequeno.png "Protractor - end to end testing for AngularJS")
 
@@ -131,22 +131,24 @@ https://nodejs.org/en/download/
  **IDE:** [Visual Studio Code](https://code.visualstudio.com/) e [Notepad++](https://notepad-plus-plus.org/download/v7.4.2.html)
 
 ### Arquitetura dos arquivos
-
-* Protractor
-	* node_modules
-		* Pacotes node.js, como 'prjasmine-spec-reporterotractor-jasmine2-html-reporter'.
-	* page_objects
-		* Mensagens.po.js
-		* QueroMeCadastrar.po.js
-		* Login.po.js
-		* *.po.js
-	* specs
-		* QueroMeCadastrar.spec.js
-		* Login.spec.js
-		* *.spec.js
-	* helper.js
-	* protractor.conf.js
-	* Readme.md
+```
+Protractor/
+ ├──page_objects                    * Diretório contendo todos os page objects utilizados nos testes
+ |   ├──Mensagens.po.js
+ |   ├──QueroMeCadastrar.po.js
+ |   ├──Login.po.js
+ |   └── *.po.js
+ ├──specs/                          * Diretório contendo todos os casos de teste
+ |   ├──QueroMeCadastrar.spec.js
+ |   ├──Login.spec.js
+ |   └── *.spec.js
+ ├──Readme.md
+ ├──TOTVS-Banco_de_Talentos.png     * Imagem utilizada no Readme.md
+ ├──helper.js                       * Biblioteca de funções utilizadas em todas as páginas
+ ├──protractor-pequeno.png          * Imagem utilizada no Readme.md
+ └──protractor.conf.js              * Configuração do projeto
+ 
+  ```
 
 - - - -
 ###### Automação do Banco de Talentos teve início independente através da necessidade de uma automação de qualidade.
