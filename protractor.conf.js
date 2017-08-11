@@ -17,19 +17,19 @@ module.exports.config =
 	// Caso 'true', só executar o protractor e ficar feliz.
 	directConnect: true,
 	
-	// multiCapabilities:
-	// [
-	// 	// {'browserName': 'internet explorer'},
-	// 	// {'browserName': 'firefox'},
-	// 	{'browserName': 'chrome'}
-	// ],
+	multiCapabilities:
+	[
+		// {'browserName': 'internet explorer'},
+		// {'browserName': 'firefox'},
+		{'browserName': 'chrome'}
+	],
 	// maxSessions: 1,
 
-	capabilities: {
-		'browserName': 'chrome',
-		shardTestFiles: true,
-		maxInstances: 6
-	},
+	// capabilities: {
+	//	'browserName': 'chrome',
+	//	shardTestFiles: true,
+	//	maxInstances: 6
+	// },
 
 	
 	baseUrl: 'http://localhost:8080/RM/Rhu-BancoTalentos/',
