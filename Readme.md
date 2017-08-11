@@ -147,16 +147,6 @@ https://nodejs.org/en/download/
 	* helper.js
 	* protractor.conf.js
 	* Readme.md
-  
-- - - -
-Scrum Master:
- > Ficando ótimo a automação Paulo
-
-Product Owner:
-> Parabéns, continue assim que está excelente, vamos apresentar pra galera depois
- 
-Colega de baia:
-> Que isso, estão te pagando pra isso? Queria esse emprego
 
 - - - -
 ###### Automação do Banco de Talentos teve início independente através da necessidade de uma automação de qualidade.
