@@ -128,8 +128,6 @@ https://nodejs.org/en/download/
  **Autor:**
  [Paulo Henrique Rocha Gonçalves](https://www.linkedin.com/in/paulo-goncalves/)
 
- **IDE:** [Visual Studio Code](https://code.visualstudio.com/) e [Notepad++](https://notepad-plus-plus.org/download/v7.4.2.html)
-
 ### Arquitetura dos arquivos
 ```
 Protractor/
