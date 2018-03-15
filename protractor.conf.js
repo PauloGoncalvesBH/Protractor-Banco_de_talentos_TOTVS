@@ -1,72 +1,59 @@
 // protractor.conf.js
 // Paulo Gonçalves
 
-// Para garantir que variáveis não podem ser usadas se não forem definidas, gerando erro.
-'use strict';
+'use strict'
 
-var SpecReporter = require('jasmine-spec-reporter').SpecReporter;
-var Jasmine2HtmlReporter = require('protractor-jasmine2-html-reporter');
+const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+const Jasmine2HtmlReporter = require('protractor-jasmine2-html-reporter');
 
 module.exports.config =
 {
     seleniumAddress: 'http://localhost:4444/wd/hub',
 	
-	// Parâmetro se determina se vai usar conexão direta ou não.
-	// Pode ser 'true' apenas se o teste for executado apenas nos navegadores Mozilla Firefox e/ou Google Chrome.
-	// Caso seja 'false', deve ser iniciado o webdriver a partir do CMD com o comando 'webdriver-manager start'.
-	// Caso 'true', só executar o protractor e ficar feliz.
-	directConnect: true,
+	directConnect: true,	
 	
-	multiCapabilities:
+	// chromeOptions: 'incognito', 'headless', 'disable-gpu', 'window-size=800x600'
+   	multiCapabilities:
 	[
-		// {'browserName': 'internet explorer'},
-		// {'browserName': 'firefox'},
-		{'browserName': 'chrome'}
+		/*{'browserName': 'internet explorer', 'shardTestFiles': false, 'maxInstances': 1},
+		{'browserName': 'firefox', 'shardTestFiles': false, 'maxInstances': 1},*/
+		{'browserName': 'chrome', 'shardTestFiles': false, 'maxInstances': 3/*, 'chromeOptions': { 'args': ['headless', 'disable-gpu', 'window-size=800x600']}*/}
 	],
-	// maxSessions: 1,
-
-	// capabilities: {
-	//	'browserName': 'chrome',
-	//	shardTestFiles: true,
-	//	maxInstances: 6
-	// },
-
+	maxSessions: 1,
 	
-	baseUrl: 'http://localhost:8080/RM/Rhu-BancoTalentos/',
+	baseUrl: 'http://bhd050101847:8080/RM/Rhu-BancoTalentos/',
 	
+	// Para executar suite de teste específica -> protractor --suite=Backlog
+	// Organizado por ordem decrescente de tempo de execução.
 	suites:
 	{
-		// Verificar conexão do Banco de Talentos com o host.
-		Smoke: 'specs/Smoke.spec.js',
-		
 		// Testes
-		Login: 'specs/Login.spec.js',
 		QueroMeCadastrar: 'specs/QueroMeCadastrar.spec.js',
-		Questionario: 'specs/Questionario.spec.js',
 		Backlog: 'specs/Backlog.spec.js',
-		TodasAsVagas: 'specs/TodasAsVagas.spec.js'
+		Questionario: 'specs/Questionario.spec.js',
+		TodasAsVagas: 'specs/TodasAsVagas.spec.js',
+		Login: 'specs/Login.spec.js',
+
+		// Verifica a conexão do Banco de Talentos com o host.
+		Smoke: 'specs/Smoke.spec.js'
 	},
 	
 	params:
 	{
-		TempoSleepPosBrowserGet: 1000,
-		// Utilizado em QueroMeCadastrar.FecharMensagemBoasVindas
-		TempoSleepFecharMensagemBoasVindas: 500,
-		TempoSleepAguardarAcaoAbaDoPerfil: 500,
+		/* Tempo utilizado em: 
+		1 - No ImplicitlyWait no onPrepare do Conf.js
+		2 - No método AguardarElemento no helper.js */
+		TempoEmMilissegundosTimeout: 10000,
 		Login:
 		{
 			SenhaPadrao: 'senha123'
-		},
-		// Utilizado em Questionarios.po.js
-		TempoSleepAbrirFecharQuestionario: 600
+		}
 	},
-	
-	// Tudo que deve ser executado antes do início dos testes.
+
 	onPrepare: function()
 	{
-		
 		// Organiza os resultados no Prompt de Comando.
-		jasmine.getEnv().addReporter(new	SpecReporter(
+		jasmine.getEnv().addReporter(new SpecReporter(
 		{
 			displayFailuresSummary: true,
 			displayFailedSpec: true,
@@ -75,18 +62,18 @@ module.exports.config =
 		}));
 		
 		// Gera relatório de resultados no diretório especificado.
-		jasmine.getEnv().addReporter(new	Jasmine2HtmlReporter(
+		jasmine.getEnv().addReporter(new Jasmine2HtmlReporter(
 		{
 			takeScreenshots: true,
-			fixedScreenshotName: true,
-			savePath: '../Compartilhados/Relatorio_Protractor_-_Banco_de_Talentos/',
+			savePath: 'report/',
+			fileNamePrefix: 'Automação Banco de Talentos',
+			fileNameSeparator: '-',
 			fileNameDateSuffix: true,
-			cleanDestination: false,
+			cleanDestination: true,
 			takeScreenshotsOnlyOnFailures: true
 		}));
 		
-		// Maximixa a janela do navegador.
+    	browser.manage().timeouts().implicitlyWait(browser.params.TempoEmMilissegundosTimeout)
 		browser.driver.manage().window().maximize();
-	}
-	
+	},
 };

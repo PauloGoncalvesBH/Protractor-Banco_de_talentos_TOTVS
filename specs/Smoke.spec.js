@@ -1,15 +1,18 @@
 // Smoke.spec.js
 // Paulo Gonçalves
 
-var QueroMeCadastrar = require('../page_objects/QueroMeCadastrar.po.js');
-var Login = require('../page_objects/Login.po.js');
-var Mensagens = require('../page_objects/Mensagens.po.js');
+'use strict'
 
-describe('(Smoke) Teste de Fumaça - Conexão do "Banco de Talentos"', function()
+const QueroMeCadastrar = require('../page_objects/QueroMeCadastrar.po.js');
+const Login = require('../page_objects/Login.po.js');
+const Mensagens = require('../page_objects/Mensagens.po.js');
+require('../ElementFinder.js');
+
+describe('(Smoke) Teste de Fumaça - Conexão do "Banco de Talentos"', ()=>
 {
-	var queroMeCadastrar = new QueroMeCadastrar();
-	var login = new Login();
-	var mensagens = new Mensagens();
+	const queroMeCadastrar = new QueroMeCadastrar();
+	const login = new Login();
+	const mensagens = new Mensagens();
 	
 	beforeEach(function()
 	{
@@ -17,17 +20,17 @@ describe('(Smoke) Teste de Fumaça - Conexão do "Banco de Talentos"', function(
 		queroMeCadastrar.Visita();
 	});
 	
-	it('Validar que surge mensagem de alerta ao realizar login sem preencher "Usuário" e "Senha"', function() {
+	it('Validar que surge mensagem de alerta ao realizar login sem preencher "Usuário" e "Senha"', ()=> {
 		// act		
-		login.ClickEntrarButton();
+		login.EntrarButton.Clicar();
 		
 		// assert
 		expect(mensagens.MensagemNaoCadastrado.isDisplayed()).toBe(true);
 	});
 	
-	it('Validar que a lista de nacionalidade é "carregada"', function() {
+	it('Validar que a lista de nacionalidade é "carregada"', ()=> {
 		// act
-		queroMeCadastrar.ClicarCampoNacionalidade();
+		queroMeCadastrar.Nacionalidade.Clicar();
 		
 		// assert
 		expect(queroMeCadastrar.ElementoListaNacionalidade('Brasileira').isDisplayed()).toBe(true);

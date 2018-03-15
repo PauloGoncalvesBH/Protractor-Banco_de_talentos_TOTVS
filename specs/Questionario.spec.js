@@ -1,22 +1,24 @@
 // Questionario.spec.js
 // Paulo Gonçalves
 
-var Login = require('../page_objects/Login.po.js');
-var QueroMeCadastrar = require('../page_objects/QueroMeCadastrar.po.js');
-var Helper = require('../helper.js');
-var TodasAsVagas = require('../page_objects/TodasAsVagas.po.js');
-var Perfil = require('../page_objects/Perfil.po.js');
-var Questionarios = require('../page_objects/Questionarios.po.js');
-var Mensagens = require('../page_objects/Mensagens.po.js');
+'use strict'
 
-describe('(Questionario) Teste total da página "Questionários"', function() {
-	var login = new Login();
-	var queroMeCadastrar = new QueroMeCadastrar();
-	var helper = new Helper();
-	var todasAsVagas = new TodasAsVagas();
-	var perfil = new Perfil();
-	var questionarios = new Questionarios();
-	var mensagens = new Mensagens();
+const Login = require('../page_objects/Login.po.js');
+const QueroMeCadastrar = require('../page_objects/QueroMeCadastrar.po.js');
+const Helper = require('../helper.js');
+const TodasAsVagas = require('../page_objects/TodasAsVagas.po.js');
+const Perfil = require('../page_objects/Perfil.po.js');
+const Questionarios = require('../page_objects/Questionarios.po.js');
+const Mensagens = require('../page_objects/Mensagens.po.js');
+
+describe('(Questionario) Teste total da página "Questionários"', ()=> {
+	const login = new Login();
+	const queroMeCadastrar = new QueroMeCadastrar();
+	const helper = new Helper();
+	const todasAsVagas = new TodasAsVagas();
+	const perfil = new Perfil();
+	const questionarios = new Questionarios();
+	const mensagens = new Mensagens();
 
 	// ----------
 	// Será abordado também a seguinte issue:
@@ -44,44 +46,44 @@ describe('(Questionario) Teste total da página "Questionários"', function() {
 	// Questão 2: Múltipla Escolha, 1 resposta com número 7, inativa.
 	// Questão 3: Qualquer tipo, obrigatório e inativo.
 	
-	// Para 'Login' e 'Cadastro'.
-	var UserObj = {Usuario: "questionarios"};
+	let objUser = {usuario: ''};
+
 	// Vaga a qual irá candidatar e fazer as verificações do questionário.
-	var Vaga = 'Questionário Obrigatório';
+	const Vaga = 'Questionário Obrigatório';
 	// Questionário que está atrelado à vaga
-	var QuestionarioVaga = 'Automacao 01';
+	const QuestionarioVaga = 'Automacao 01';
 	// Vitae >> Configurações >> RM Portal >> Banco de Talentos (Currículo)
 	// Questionário padrão que está cadastrado no parametrizador no lookup.
-	var QuestionarioPadraoLookup = 'Padrao';
+	const QuestionarioPadraoLookup = 'Padrao';
 	// Questionário que está no campo 'Código dos outros questionários a serem exibidos(...)'.
-	var QuestionarioPadraoOutros = 'Padrão 2';
+	const QuestionarioPadraoOutros = 'Padrão 2';
 	
-	beforeAll(function() {
+	beforeAll(()=> {
 		// Cadastro do usuário a ser utilizado nos testes
 		queroMeCadastrar.Visita();
 		
-		// Cadastro que altera o objeto 'UserObj' para reutilização do usuário no login.
-		queroMeCadastrar.CadastroPadraoApenasUsuarioUtilizandoReferencia(UserObj);
+		queroMeCadastrar.CadastroPadraoRetornandoUsuarioPorReferencia(objUser);
 		
 		login.DeslogarBancoDeTalentos();
 	});
 	
-	beforeEach(function() {
+	beforeEach(()=> {
 		// @Arrange
-		queroMeCadastrar.Visita();
-		login.LogarBancoDeTalentosComSenhaPadrao(UserObj.Usuario);
+		login.LogarBancoDeTalentosComSenhaPadrao(objUser.usuario);
+		helper.AguardarElemento(mensagens.MensagemLoginSucesso);
 		helper.RecarregarPagina();
 	});
 	
-	afterEach(function() {
+	afterEach(()=> {
 		// Deslogar - Preparação para o proximo teste
 		login.DeslogarBancoDeTalentos();
 	});
 	
-	it('Verificar que o Usuário possui apenas os 2 questionários padrões após o cadastro.', function() {
+	it('Verificar que o Usuário possui apenas os 2 questionários padrões após o cadastro.', ()=> {
 		// @Act
 		helper.AcessarQuestionarios();
-		
+
+		helper.AguardarElemento(questionarios.ElementoQuestionario(QuestionarioPadraoLookup));
 		// @Assert
 			// Valida a presença dos 2 questionários.
 		expect(questionarios.ElementoQuestionario(QuestionarioPadraoLookup).isDisplayed()).toBe(true);
@@ -90,7 +92,7 @@ describe('(Questionario) Teste total da página "Questionários"', function() {
 		expect(questionarios.TodosOsQuestionarios.count()).toEqual(2);
 	});
 	
-	it('Verificar que após a candidatura está presente o questionário da vaga e os 2 questionários padrões.', function() {
+	it('Verificar que após a candidatura está presente o questionário da vaga e os 2 questionários padrões.', ()=> {
 		// @Act
 		
 			// Realiza a candidatura
@@ -103,8 +105,6 @@ describe('(Questionario) Teste total da página "Questionários"', function() {
 		perfil.EditarAbaPerfilSetFormaDeContratacaoESalvar('Trainee (recém-formado)');
 		
 			// Acessa 'Painel de Vagas' >> 'Todas As Vagas'
-		helper.AcessarTodasAsVagas();
-		
 		todasAsVagas.FiltrarPorVagaAbrirECandidatar(Vaga);
 		
 		helper.AcessarQuestionarios();
@@ -118,19 +118,19 @@ describe('(Questionario) Teste total da página "Questionários"', function() {
 	});
 	
 	// QuestionarioPadraoLookup \/
-	it('Verificar que surge alerta de campo obrigatório não preenchido ao abrir e tentar salvar questionário com campo obrigatório.', function() {
+	it('Verificar que surge alerta de campo obrigatório não preenchido ao abrir e tentar salvar questionário com campo obrigatório.', ()=> {
 		// @Act
 		helper.AcessarQuestionarios();
 		
 		questionarios.AbrirQuestionario(QuestionarioPadraoLookup);
-		questionarios.Salvar();
+		questionarios.BotaoSalvar.Clicar();
 		
 		// @Assert
 			// Valida que surge a mensagem de alerta de que a questão 1 não está preenchida.
 		expect(mensagens.AlertaQuestao1NaoPreenchida.isDisplayed()).toBe(true);
 	});
 	
-	it('Verificar que status do questionário é inicialmente "Não preenchido"', function() {
+	it('Verificar que status do questionário é inicialmente "Não preenchido"', ()=> {
 		// @Act
 		helper.AcessarQuestionarios();
 		
@@ -141,13 +141,13 @@ describe('(Questionario) Teste total da página "Questionários"', function() {
 		expect(questionarios.StatusPreenchido.isPresent()).toBe(false);
 	});
 	
-	it('Verificar que ao preencher parte do questionário o status é alterado para "Parcialmente"', function() {
+	it('Verificar que ao preencher parte do questionário o status é alterado para "Parcialmente"', ()=> {
 		// @Act
 		helper.AcessarQuestionarios();
 		
 		questionarios.AbrirQuestionario(QuestionarioPadraoLookup);
 		questionarios.PreencherQuestaoUm('teste teste teste');
-		questionarios.Salvar();
+		questionarios.BotaoSalvar.Clicar();
 		
 		// @Assert
 			// Valida que há apenas questionários não preenchidos e preenchidos parcialmente.
@@ -159,7 +159,7 @@ describe('(Questionario) Teste total da página "Questionários"', function() {
 		expect(mensagens.QuestionarioSalvoComSucesso.isDisplayed()).toBe(true);
 	});
 	
-	it('Verificar que ao preencher todo o questionário seu status é alterado para "Preenchido"', function() {
+	it('Verificar que ao preencher todo o questionário seu status é alterado para "Preenchido"', ()=> {
 		// @Act
 		helper.AcessarQuestionarios();
 		
@@ -168,11 +168,11 @@ describe('(Questionario) Teste total da página "Questionários"', function() {
 		
 		questionarios.AbrirQuestionario(QuestionarioPadraoLookup);
 		questionarios.PreencherQuestaoUm('teste teste teste');
-		var OpcaoQuestaoDois = '13';
+		const OpcaoQuestaoDois = '13';
 		questionarios.PreencherQuestaoDois(OpcaoQuestaoDois);
 		questionarios.PreencherQuestaoTres('1');
 		
-		questionarios.Salvar();
+		questionarios.BotaoSalvar.Clicar();
 		
 		// @Assert
 			// Valida que o questionário foi salvo com sucesso.
@@ -184,22 +184,22 @@ describe('(Questionario) Teste total da página "Questionários"', function() {
 		// Limpa os valores dos campos obrigatórios para testes posteriores.
 		questionarios.AbrirQuestionario(QuestionarioPadraoLookup);
 		questionarios.PreencherQuestaoDois(OpcaoQuestaoDois);
-		questionarios.ApagarRespostaQuestaoTres();
-		questionarios.Salvar();
+		questionarios.BotaoLimparValor.Clicar();
+		questionarios.BotaoSalvar.Clicar();
 	});
 	
-	it('(RHU01-705) Verificar que ao preencher todo o questionário, salvar e o reabrir, todos os dados preenchidos são recuperados.', function() {
+	it('(RHU01-705) Verificar que ao preencher todo o questionário, salvar e o reabrir, todos os dados preenchidos são recuperados.', ()=> {
 		// @Act
 		helper.AcessarQuestionarios();
 		
 		questionarios.AbrirQuestionario(QuestionarioPadraoLookup);
 		questionarios.PreencherQuestaoUm('Teste (RHU01-705)');
-		var OpcaoQuestaoDois = '8';
+		const OpcaoQuestaoDois = '8';
 		questionarios.PreencherQuestaoDois(OpcaoQuestaoDois);
-		var OpcaoQuestaoTres = '2';
+		const OpcaoQuestaoTres = '2';
 		questionarios.PreencherQuestaoTres(OpcaoQuestaoTres);
 		
-		questionarios.Salvar();
+		questionarios.BotaoSalvar.Clicar();
 		
 		questionarios.AbrirQuestionario(QuestionarioPadraoLookup);
 		// @Assert
@@ -210,7 +210,7 @@ describe('(Questionario) Teste total da página "Questionários"', function() {
 	});
 	
 	// QuestionarioPadraoOutros \/
-	it('(RHU01-1139) Verificar que os campos inativos não aparecem no questionário.', function() {
+	it('(RHU01-1139) Verificar que os campos inativos não aparecem no questionário.', ()=> {
 		// @Act
 		helper.AcessarQuestionarios();
 		
@@ -223,13 +223,13 @@ describe('(Questionario) Teste total da página "Questionários"', function() {
 		expect(questionarios.Questao('3').isPresent()).toBe(false);
 	});
 	
-	it('(RHU01-1139) Verificar que ao preencher a única questão ativa, não surge mensagem de questão obrigatória não preenchida. A única questão obrigatória (3) está inativa.', function() {
+	it('(RHU01-1139) Verificar que ao preencher a única questão ativa, não surge mensagem de questão obrigatória não preenchida. A única questão obrigatória (3) está inativa.', ()=> {
 		// @Act
 		helper.AcessarQuestionarios();
 		
 		questionarios.AbrirQuestionario(QuestionarioPadraoOutros);
 		questionarios.PreencherQuestaoUm('Teste Questão Ativa');
-		questionarios.Salvar();
+		questionarios.BotaoSalvar.Clicar();
 		
 		// @Assert
 			// Valida que o questionário foi salvo com sucesso. Questão 1 é a única ativa.

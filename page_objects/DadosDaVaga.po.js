@@ -1,30 +1,21 @@
 // DadosDaVaga.po.js
 // Paulo Gonçalves
 
-var Helper = require('../helper.js');
+'use strict'
 
-var helper = new Helper();
+const Helper = require('../helper.js');
 
+const helper = new Helper();
+require('../ElementFinder.js');
 
-var DadosDaVaga = function() {
-	this.BotaoVoltar = element(by.css('[ng-click="controller.voltaPaginaAnterior();"]'));
-	this.BotaoCandidatar = element(by.css('[ng-click="controller.candidatarVaga();"]'));
-	this.BotaoFecharImpedimento = element(by.css('[ng-click="ok()"]'));
-};
+class DadosDaVaga {
 
-DadosDaVaga.prototype.ClicarNoBotaoVoltar = function() {
-	helper.ScrollAteElemento(this.BotaoVoltar);
-	this.BotaoVoltar.click();
-};
+	constructor() {
+		this.BotaoVoltar = element(by.css('[ng-click="controller.voltaPaginaAnterior();"]'));
+		this.BotaoCandidatar = element(by.css('[ng-click="controller.candidatarVaga();"]'));
+		this.BotaoFecharImpedimento = element(by.css('[ng-click="ok()"]'));
+	}
+	
+}
 
-DadosDaVaga.prototype.ClicarNoBotaoCandidatar = function() {
-	helper.ScrollAteElemento(this.BotaoCandidatar);
-	this.BotaoCandidatar.click();
-};
-
-DadosDaVaga.prototype.FecharImpedimento = function() {
-	helper.ScrollAteElemento(this.BotaoFecharImpedimento);
-	this.BotaoFecharImpedimento.click();
-};
-
-module.exports = DadosDaVaga;	
+module.exports = DadosDaVaga;

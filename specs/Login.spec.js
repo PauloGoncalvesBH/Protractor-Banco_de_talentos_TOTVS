@@ -1,34 +1,32 @@
 // Login.spec.js
 // Paulo Gonçalves
 
-var Login = require('../page_objects/Login.po.js');
-var Mensagens = require('../page_objects/Mensagens.po.js');
-var QueroMeCadastrar = require('../page_objects/QueroMeCadastrar.po.js');
+'use strict'
 
-describe('(Login) Teste total de Login', function()
+const Login = require('../page_objects/Login.po.js');
+const Mensagens = require('../page_objects/Mensagens.po.js');
+const QueroMeCadastrar = require('../page_objects/QueroMeCadastrar.po.js');
+const Helper = require('../helper.js');
+
+describe('(Login) Teste total de Login', ()=>
 {
-	var login = new Login();
-	var mensagens = new Mensagens();
-	var queroMeCadastrar = new QueroMeCadastrar();
+	const login = new Login();
+	const mensagens = new Mensagens();
+	const queroMeCadastrar = new QueroMeCadastrar();
+	const helper = new Helper();
 	
-	beforeEach(function()
-	{
+	it('Realizar login com usuário e senha válidos.', ()=> {
 		// @Arrange
-		login.Visita();
-	});
-	
-	it('Realizar login com usuário e senha válidos.', function() {
-		// @Arrange
-		var LoginRepetidoObj = {Usuario: "LoginOk"};
-
 		queroMeCadastrar.Visita();
 		
-		queroMeCadastrar.CadastroPadraoApenasUsuarioUtilizandoReferencia(LoginRepetidoObj);
+		let objUser = {usuario: ''};
+
+		queroMeCadastrar.CadastroPadraoRetornandoUsuarioPorReferencia(objUser);
 
 		login.DeslogarBancoDeTalentos();
 
 		// @Act
-		login.LogarBancoDeTalentosComSenhaPadrao(LoginRepetidoObj.Usuario);
+		login.LogarBancoDeTalentosComSenhaPadrao(objUser.usuario);
 		
 		// @Assert
 		expect(mensagens.MensagemLoginSucesso.isDisplayed()).toBe(true);
@@ -37,17 +35,25 @@ describe('(Login) Teste total de Login', function()
 		login.DeslogarBancoDeTalentos();
 	});
 	
-	it('Tentar logar com usuário e senha inválidos', function() {
+	it('Tentar logar com usuário e senha inválidos', ()=> {
+		// @Arrange
+		queroMeCadastrar.Visita();
+		
 		// @Act
-		login.LogarBancoDeTalentos('123adasd', 'asdasd');
+		login.LogarBancoDeTalentos(helper.GerarCaracteres(), helper.GerarCaracteres());
+
+		// login.EntrarButton.Clicar();
 		
 		// @Assert
 		expect(mensagens.MensagemNaoCadastrado.isDisplayed()).toBe(true);
 	});
 	
-	it('Tentar logar com usuário e senha sem preenchimento', function() {
+	it('Tentar logar com usuário e senha sem preenchimento', ()=> {
+		// @Arrange
+		login.Visita();
+
 		// @Act		
-		login.ClickEntrarButton();
+		login.EntrarButton.Clicar();
 		 
 		// @Assert
 		expect(mensagens.MensagemNaoCadastrado.isDisplayed()).toBe(true);

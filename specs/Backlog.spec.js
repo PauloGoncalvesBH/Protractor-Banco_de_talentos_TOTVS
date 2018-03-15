@@ -1,44 +1,46 @@
 // Backlog.spec.js
 // Paulo Gonçalves
 
-var Login = require('../page_objects/Login.po.js');
-var Mensagens = require('../page_objects/Mensagens.po.js');
-var QueroMeCadastrar = require('../page_objects/QueroMeCadastrar.po.js');
-var Helper = require('../helper.js');
-var TodasAsVagas = require('../page_objects/TodasAsVagas.po.js');
-var DadosDaVaga = require('../page_objects/DadosDaVaga.po.js');
-var Perfil = require('../page_objects/Perfil.po.js');
-var Questionarios = require('../page_objects/Questionarios.po.js');
+'use strict'
 
-describe('(Backlog) Agrupador de testes de tarefas do backlog', function() {
-	var login = new Login();
-	var mensagens = new Mensagens();
-	var queroMeCadastrar = new QueroMeCadastrar();
-	var helper = new Helper();
-	var todasAsVagas = new TodasAsVagas();
-	var dadosDaVaga = new DadosDaVaga();
-	var perfil = new Perfil();
-	var questionarios = new Questionarios();
+const Login = require('../page_objects/Login.po.js');
+const Mensagens = require('../page_objects/Mensagens.po.js');
+const QueroMeCadastrar = require('../page_objects/QueroMeCadastrar.po.js');
+const Helper = require('../helper.js');
+const TodasAsVagas = require('../page_objects/TodasAsVagas.po.js');
+const DadosDaVaga = require('../page_objects/DadosDaVaga.po.js');
+const Perfil = require('../page_objects/Perfil.po.js');
+const Questionarios = require('../page_objects/Questionarios.po.js');
+
+require('../ElementFinder.js');
+
+describe('(Backlog) Agrupador de testes de tarefas do backlog', ()=> {
+	const login = new Login();
+	const mensagens = new Mensagens();
+	const queroMeCadastrar = new QueroMeCadastrar();
+	const helper = new Helper();
+	const todasAsVagas = new TodasAsVagas();
+	const dadosDaVaga = new DadosDaVaga();
+	const perfil = new Perfil();
+	const questionarios = new Questionarios();
 	
-	describe(' - (1) (RHU01-803) - Ao atualizar corretamente a aba "Formas de Contato" informa que os campos obrigatórios não estão preenchidos', function() {
+	describe(' - (1) (RHU01-803) - Ao atualizar corretamente a aba "Formas de Contato" informa que os campos obrigatórios não estão preenchidos', ()=> {
 		// ----------
 		// http://jiraproducao.totvs.com.br/browse/RHU01-143
 		// Aba 'Formas de Contato' - Ativa com campo obrigatório (País)
 		// ----------
 		
-		beforeEach(function() {
-			// @arrange
-			queroMeCadastrar.Visita();
-		});
-		
-		afterEach(function() {
+		afterEach(()=> {
 			// Deslogar - Preparação para o proximo teste
 			login.DeslogarBancoDeTalentos();
 		});
 		
-		it('(1.0) Verificar que ao preencher os campos obrigatórios da aba "Formas de Contato" e salvar, estão sendo atualizados corretamente',function() {
+		it('(1.0) Verificar que ao preencher os campos obrigatórios da aba "Formas de Contato" e salvar, estão sendo atualizados corretamente',()=> {
 			// @arrange
-			queroMeCadastrar.CadastroPadraoApenasUsuario('errocampoobrigatorio');
+
+			queroMeCadastrar.Visita();
+			
+			queroMeCadastrar.CadastroPadrao();
 			
 			// Necessário para que os alertas de 'cadastro' e 'login' sumam, pois pela velocidade do teste ele impede
 			// de fechar o alerta de 'erro de negocio' ao tentar se candidatar a uma vaga com algum campo obrigatório não preenchido.
@@ -55,7 +57,7 @@ describe('(Backlog) Agrupador de testes de tarefas do backlog', function() {
 		
 	});
 	
-	describe(' - (2) (RHU01-765) e (RHU01-1138) - Parâmetro "Consistir preenchimento mínimo do Currículo"', function() {
+	describe(' - (2) (RHU01-765) e (RHU01-1138) - Parâmetro "Consistir preenchimento mínimo do Currículo"', ()=> {
 		// ----------
 		// http://jiraproducao.totvs.com.br/browse/RHU01-765
 		// Parâmetro 'Consistir preenchimento mínimo do Currículo' marcado em [Configuraçoes >> RM Portal >> Banco de Talentos (Currículo)]
@@ -70,33 +72,31 @@ describe('(Backlog) Agrupador de testes de tarefas do backlog', function() {
 		// Após os testes (2.3) e (2.4) deve deletar a candidatura do candidato na vaga antes de tentar excluir o currículo externo do mesmo.
 		// ----------
 		
-		var Vaga = 'Vaga RHU01-765';
+		const Vaga = 'Vaga RHU01-765';
 		
-		beforeEach(function()
+		beforeEach(()=>
 		{
 			// @arrange
 			queroMeCadastrar.Visita();
 		});
 		
-		afterEach(function()
+		afterEach(()=>
 		{
 			// Deslogar - Preparação para o proximo teste
 			login.DeslogarBancoDeTalentos();
 		});
 		
-		it('(2.1) Verificar que candidatura é impedida quando aba "Formas de Contato" não está preenchida.', function() {
+		it('(2.1) Verificar que candidatura é impedida quando aba "Formas de Contato" não está preenchida.', ()=> {
 			// @Arrange
 			
-			queroMeCadastrar.CadastroPadraoApenasUsuario('parametro1');
+			queroMeCadastrar.CadastroPadrao();
 			
 				// Necessário para que os alertas de 'cadastro' e 'login' sumam, pois pela velocidade do teste ele impede
 				// de fechar o alerta de 'erro de negocio' ao tentar se candidatar a uma vaga com algum campo obrigatório não 	preenchido.
 			helper.RecarregarPagina();
 	
 			// @Act
-				// Acessa 'Painel de Vagas' >> 'Todas As Vagas'
-			helper.AcessarTodasAsVagas();
-			
+				// Acessa 'Painel de Vagas' >> 'Todas As Vagas'			
 				// Filtra pela vaga do teste 'Analista de Automação de Testes'.
 				// Abre a vaga.
 				// Candidata à vaga.
@@ -106,16 +106,16 @@ describe('(Backlog) Agrupador de testes de tarefas do backlog', function() {
 				// Valida que a mensagem de impedimento da aba de 'Formas de Contato' está presente.
 			expect(mensagens.MensagemImpedimentoAbaFormasDeContato.isDisplayed()).toBe(true);
 			
-			dadosDaVaga.FecharImpedimento();
+			dadosDaVaga.BotaoFecharImpedimento.Clicar();
 			
 				// Valida que o botão 'Candidatar' ainda está presente.
 			expect(dadosDaVaga.BotaoCandidatar.isDisplayed()).toBe(true);
 		});
 		
-		it('(2.2) Verificar que candidatura é impedida quando a aba "Formas de Contato" está preenchida e a aba "Perfil Profissional" não está preenchida.', function() {
+		it('(2.2) Verificar que candidatura é impedida quando a aba "Formas de Contato" está preenchida e a aba "Perfil Profissional" não está preenchida.', ()=> {
 			// @arrange
 			
-			queroMeCadastrar.CadastroPadraoApenasUsuario('parametro2');
+			queroMeCadastrar.CadastroPadrao();
 			
 			// Necessário para que os alertas de 'cadastro' e 'login' sumam, pois pela velocidade do teste ele impede
 			// de fechar o alerta de 'erro de negocio' ao tentar se candidatar a uma vaga com algum campo obrigatório não preenchido.
@@ -133,9 +133,7 @@ describe('(Backlog) Agrupador de testes de tarefas do backlog', function() {
 			
 			expect(mensagens.FormasDeContatoAtualizada.isDisplayed()).toBe(true);
 			
-			// Acessa 'Painel de Vagas' >> 'Todas As Vagas'
-			helper.AcessarTodasAsVagas();
-			
+			// Acessa 'Painel de Vagas' >> 'Todas As Vagas'			
 			// Filtra pela vaga do teste 'Analista de Automação de Testes'.
 			// Abre a vaga.
 			// Candidata à vaga.
@@ -145,16 +143,16 @@ describe('(Backlog) Agrupador de testes de tarefas do backlog', function() {
 			// Valida que a mensagem de impedimento da aba de 'Dados Pessoais' está presente.
 			expect(mensagens.MensagemImpedimentoAbaPerfilProfissional.isDisplayed()).toBe(true);
 			
-			dadosDaVaga.FecharImpedimento();
+			dadosDaVaga.BotaoFecharImpedimento.Clicar();
 			
 			// Valida que o botão 'Candidatar' ainda está presente.
 			expect(dadosDaVaga.BotaoCandidatar.isDisplayed()).toBe(true);
 		});
 		
-		it('(2.3) Verificar que alerta de empregabilidade é emitido na candidatura quando somente a aba "Form. Acadêmica" não está preenchida.', function() {
+		it('(2.3) Verificar que alerta de empregabilidade é emitido na candidatura quando somente a aba "Form. Acadêmica" não está preenchida.', ()=> {
 			// @arrange
 			
-			queroMeCadastrar.CadastroPadraoApenasUsuario('parametro3');
+			queroMeCadastrar.CadastroPadrao();
 			
 			// Necessário para que os alertas de 'cadastro' e 'login' sumam, pois pela velocidade do teste ele impede
 			// de fechar o alerta de 'erro de negocio' ao tentar se candidatar a uma vaga com algum campo obrigatório não preenchido.
@@ -168,18 +166,12 @@ describe('(Backlog) Agrupador de testes de tarefas do backlog', function() {
 			
 			perfil.EditarAbaFormasSetPaisESalvar('Japão');
 			
-			expect(mensagens.FormasDeContatoAtualizada.isDisplayed()).toBe(true);
-			
 			// Aba 'Perfil Profissional'.
 			
 			perfil.EditarAbaPerfilSetFormaDeContratacaoESalvar('Trainee (recém-formado)');
-			
-			expect(mensagens.PerfilProfissionalAtualizada.isDisplayed()).toBe(true);
 			// #endregion
 			
 			// Acessa 'Painel de Vagas' >> 'Todas As Vagas'
-			helper.AcessarTodasAsVagas();
-			
 			// Filtra pela vaga do teste 'Analista de Automação de Testes'.
 			// Abre a vaga.
 			// Candidata à vaga.
@@ -194,10 +186,10 @@ describe('(Backlog) Agrupador de testes de tarefas do backlog', function() {
 		});
 		
 		// AGUARDAR CORREÇÃO DA ISSUE
-		it('(2.4) (RHU01-1138) Verificar que nenhum alerta e/ou impedimento é emitido na candidatura quando todas as abas são preenchidas', function() {
+		it('(2.4) (RHU01-1138) Verificar que nenhum alerta e/ou impedimento é emitido na candidatura quando todas as abas são preenchidas', ()=> {
 			// @Arrange
 			
-			queroMeCadastrar.CadastroPadraoApenasUsuario('parametro4');
+			queroMeCadastrar.CadastroPadrao();
 			
 				// Necessário para que os alertas de 'cadastro' e 'login' sumam, pois pela velocidade do teste ele impede
 				// de fechar o alerta de 'erro de negocio' ao tentar se candidatar a uma vaga com algum campo obrigatório não preenchido.
@@ -217,16 +209,14 @@ describe('(Backlog) Agrupador de testes de tarefas do backlog', function() {
 			
 				// Aba 'Formação Acadêmica'.
 			
-			perfil.AdicionarFormacaoAcademica();
-			perfil.SetOutroCurso('Sistemas de Informações');
-			perfil.SetOutraEntidadeEscola('Faculdade');
+			perfil.BotaoAdicionarFormacaoAcademica.Clicar();
+			perfil.OutroCurso.EnviarTexto('Sistemas de Informações');
+			perfil.OutraEntidadeEscola.EnviarTexto('Faculdade');
 			perfil.SetGrauDeInstrucao('Graduação');
-			perfil.SalvarFormacaoAcademica();
+			perfil.BotaoSalvarFormacaoAcademica.Clicar();
 				// #endregion
 			
 				// Acessa 'Painel de Vagas' >> 'Todas As Vagas'
-			helper.AcessarTodasAsVagas();
-			
 				// Filtra pela vaga do teste 'Analista de Automação de Testes'.
 				// Abre a vaga.
 				// Candidata à vaga.
@@ -237,40 +227,40 @@ describe('(Backlog) Agrupador de testes de tarefas do backlog', function() {
 			expect(mensagens.MensagemAlertaAbaFormAcademica.isPresent()).toBe(false);
 			expect(mensagens.MensagemImpedimentoAbaFormasDeContato.isPresent()).toBe(false);
 			expect(mensagens.MensagemImpedimentoAbaPerfilProfissional.isPresent()).toBe(false);
-					
+			
 				// Valida que o botão 'Candidatar' não está mais presente.
-			expect(dadosDaVaga.BotaoCandidatar.isPresent()).toBe(false);
+			expect(dadosDaVaga.BotaoCandidatar.isDisplayed()).toBe(false);
 		});
 		
 	});
 	
-	describe(' - (3) (RHU01-1052) - Parâmetro "Transformar letras dos campos alfanuméricos para maiúsculas"', function() {
+	describe(' - (3) (RHU01-1052) - Parâmetro "Transformar letras dos campos alfanuméricos para maiúsculas"', ()=> {
 		// ----------
 		// http://jiraproducao.totvs.com.br/browse/RHU01-1052
 		// Parâmetro "Transformar letras dos campos alfanuméricos para maiúsculas" em
 		// parametrizador >> 'Configurações >> RM Portal >> Banco de Talentos (Currículo)' deve estar marcado.
 		// ----------
 		
-		beforeEach(function() {
+		beforeEach(()=> {
 			// @arrange
 			queroMeCadastrar.Visita();
 		});
 		
-		it('(3.0) Verificar que ao preencher o nome na página "Quero me Cadastrar" o mesmo está sendo alterado para caixa alta.',function() {
+		it('(3.0) Verificar que ao preencher o nome na página "Quero me Cadastrar" o mesmo está sendo alterado para caixa alta.',()=> {
 			// @Act
 			
 				// Informa o valor que será preenchido no campo 'Usuário'.
-			var TextoMinusculo = 'lówer UPPÊR midDLE';
+			const TextoMinusculo = 'lówer UPPÊR midDLE';
 
 				// Preenche o campo 'Usuario' e seleciona o campo 'EMail'.
-			queroMeCadastrar.SetUsuario(TextoMinusculo);
+			queroMeCadastrar.Usuario.EnviarTexto(TextoMinusculo);
 			queroMeCadastrar.SetEmail('');
 
 				// Move a página até o campo 'Usuario'.
 			helper.ScrollAteElemento(queroMeCadastrar.Usuario);
 			
 				// Converte o texto preenchido no campo 'Usuário' para caixa alta para ser usado na validação.
-				var TextoMaiusculo = TextoMinusculo.toUpperCase();
+				const TextoMaiusculo = TextoMinusculo.toUpperCase();
 
 			// @Assert
 				// Verifica que o texto do campo está todo em maísculo.
